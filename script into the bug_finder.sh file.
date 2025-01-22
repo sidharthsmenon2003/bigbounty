@@ -1,0 +1,25 @@
+
+
+
+#!/bin/bash
+
+# Check if target is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <target-ip or target-url>"
+    exit 1
+fi
+
+# Scan target with Nmap
+echo "Scanning target with Nmap..."
+nmap -sV -T4 -O -F --version-light $1
+
+# Scan target with Nikto
+echo "Scanning target with Nikto..."
+nikto -h $1
+
+# Check system logs for errors and warnings
+echo "Checking system logs for errors and warnings..."
+grep "error" /var/log/syslog
+grep "warning" /var/log/syslog
+
+echo "Bug finding process completed."
